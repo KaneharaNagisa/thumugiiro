@@ -7,7 +7,7 @@
 
 ## 技術スタック・実行環境
 
-- バックエンド: PHP 8.3 / Laravel 11
+- バックエンド: PHP 8.3 / Laravel 12
 - 実行環境: Docker
 - コンテナ構成: PHP-FPM / Nginx / MySQL 8.0 / Redis等
 
