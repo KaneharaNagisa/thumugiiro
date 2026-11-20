@@ -1,0 +1,3 @@
+PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+
+* * * * * root su -s /bin/sh www-data -c 'cd /var/www/html && php artisan schedule:run' >> /proc/1/fd/1 2>> /proc/1/fd/2
