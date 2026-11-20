@@ -35,4 +35,11 @@ return [
         ],
     ],
 
+    'ai_consultation' => [
+        'key' => env('AI_CONSULTATION_API_KEY'),
+        'model' => env('AI_CONSULTATION_MODEL', 'gpt-4.1-mini'),
+        'endpoint' => env('AI_CONSULTATION_ENDPOINT', 'https://api.openai.com/v1/chat/completions'),
+        'timeout' => (int) env('AI_CONSULTATION_TIMEOUT', 20),
+    ],
+
 ];
