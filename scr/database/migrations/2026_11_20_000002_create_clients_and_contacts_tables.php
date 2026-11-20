@@ -23,6 +23,7 @@ return new class extends Migration
 
         Schema::create('contacts', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('user_id')->nullable()->constrained()->nullOnDelete();
             $table->foreignId('client_id')->nullable()->constrained()->nullOnDelete();
             $table->string('name');
             $table->string('email');
@@ -36,6 +37,7 @@ return new class extends Migration
             $table->timestamps();
 
             $table->index(['status', 'created_at']);
+            $table->index(['user_id', 'created_at']);
             $table->index('email');
         });
     }

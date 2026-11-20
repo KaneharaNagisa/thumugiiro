@@ -52,4 +52,9 @@ class User extends Authenticatable
     {
         return $this->hasMany(AiChatSession::class);
     }
+
+    public function contacts(): HasMany
+    {
+        return $this->hasMany(Contact::class);
+    }
 }
