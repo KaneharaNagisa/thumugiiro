@@ -1,0 +1,632 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>THUMUGIIRO - End-User Design System</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Google Fonts: Cormorant Garamond & Zen Kaku Gothic New -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,400&family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap" rel="stylesheet">
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            dango: {
+              sakura: '#F8B5C5',
+              sakuraSoft: '#FFF2F5',
+              kusa: '#9FD6A3',
+              kusaSoft: '#F0F9F1',
+              lemon: '#FDFF26',
+              accent: '#E66B7C',
+              text: '#363230',
+              muted: '#8F8985'
+            }
+          },
+          fontFamily: {
+            serif: ['"Cormorant Garamond"', 'serif'],
+            sans: ['"Zen Kaku Gothic New"', 'sans-serif'],
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    body {
+      font-family: 'Zen Kaku Gothic New', sans-serif;
+      color: #363230;
+      background-color: #FFFFFF;
+      position: relative;
+      overflow-x: hidden;
+    }
+    .font-en {
+      font-family: 'Cormorant Garamond', serif;
+    }
+
+    /* 水彩スポットレイヤー（背景最背面） */
+    .watercolor-spot-layer {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* 右上水彩 */
+    .spot-tr-yellow {
+      position: absolute;
+      top: 140px;
+      right: -60px;
+      width: 480px;
+      height: 460px;
+      background: radial-gradient(circle at 65% 45%, rgba(255, 255, 120, 0.48) 0%, rgba(253, 255, 50, 0.38) 35%, rgba(254, 255, 180, 0.18) 55%, rgba(255, 255, 255, 0) 72%);
+      filter: blur(42px);
+      border-radius: 45% 55% 60% 40% / 50% 45% 55% 50%;
+    }
+    .spot-tr-coral {
+      position: absolute;
+      top: 110px;
+      right: 180px;
+      width: 280px;
+      height: 280px;
+      background: radial-gradient(circle at 50% 50%, rgba(250, 138, 108, 0.6) 0%, rgba(252, 178, 155, 0.3) 48%, rgba(255, 255, 255, 0) 72%);
+      filter: blur(36px);
+      border-radius: 40% 60% 55% 45% / 55% 45% 55% 45%;
+    }
+    .spot-tr-green {
+      position: absolute;
+      top: 360px;
+      right: -90px;
+      width: 380px;
+      height: 380px;
+      background: radial-gradient(circle at 60% 50%, rgba(148, 219, 142, 0.65) 0%, rgba(196, 240, 190, 0.35) 50%, rgba(255, 255, 255, 0) 72%);
+      filter: blur(40px);
+      border-radius: 55% 45% 40% 60% / 45% 60% 40% 55%;
+    }
+
+    /* 左中央水彩 */
+    .spot-ml-yellow {
+      position: absolute;
+      top: 1100px;
+      left: -200px;
+      width: 640px;
+      height: 600px;
+      background: radial-gradient(circle at 35% 50%, rgba(255, 255, 120, 0.42) 0%, rgba(253, 255, 50, 0.32) 35%, rgba(254, 255, 180, 0.15) 55%, rgba(255, 255, 255, 0) 72%);
+      filter: blur(52px);
+      border-radius: 52% 48% 45% 55% / 48% 54% 46% 52%;
+    }
+    .spot-ml-green {
+      position: absolute;
+      top: 920px;
+      left: -170px;
+      width: 500px;
+      height: 500px;
+      background: radial-gradient(circle at 40% 45%, rgba(148, 219, 142, 0.52) 0%, rgba(196, 240, 190, 0.25) 48%, rgba(255, 255, 255, 0) 70%);
+      filter: blur(46px);
+      border-radius: 58% 42% 45% 55% / 45% 55% 45% 55%;
+    }
+    .spot-ml-coral {
+      position: absolute;
+      top: 1290px;
+      left: 50px;
+      width: 300px;
+      height: 300px;
+      background: radial-gradient(circle at 50% 50%, rgba(250, 138, 108, 0.45) 0%, rgba(252, 178, 155, 0.2) 45%, rgba(255, 255, 255, 0) 70%);
+      filter: blur(38px);
+      border-radius: 50% 50% 40% 60% / 60% 40% 60% 40%;
+    }
+
+    /* 右下水彩 */
+    .spot-br-yellow {
+      position: absolute;
+      bottom: 220px;
+      right: -80px;
+      width: 360px;
+      height: 340px;
+      background: radial-gradient(circle at 65% 55%, rgba(255, 255, 120, 0.45) 0%, rgba(253, 255, 50, 0.35) 35%, rgba(254, 255, 185, 0.16) 55%, rgba(255, 255, 255, 0) 72%);
+      filter: blur(36px);
+      border-radius: 48% 52% 55% 45% / 55% 45% 55% 45%;
+    }
+    .spot-br-green {
+      position: absolute;
+      bottom: 150px;
+      right: -40px;
+      width: 250px;
+      height: 250px;
+      background: radial-gradient(circle at 60% 60%, rgba(148, 219, 142, 0.5) 0%, rgba(205, 245, 200, 0.24) 48%, rgba(255, 255, 255, 0) 70%);
+      filter: blur(32px);
+      border-radius: 55% 45% 40% 60% / 50% 60% 40% 50%;
+    }
+    .spot-br-coral {
+      position: absolute;
+      bottom: 370px;
+      right: 90px;
+      width: 170px;
+      height: 170px;
+      background: radial-gradient(circle at 50% 50%, rgba(250, 138, 108, 0.45) 0%, rgba(252, 178, 155, 0.2) 45%, rgba(255, 255, 255, 0) 70%);
+      filter: blur(28px);
+      border-radius: 45% 55% 55% 45% / 50% 50% 50% 50%;
+    }
+
+    .watermark-text {
+      font-family: 'Cormorant Garamond', serif;
+      writing-mode: vertical-rl;
+      letter-spacing: 0.38em;
+      user-select: none;
+      pointer-events: none;
+    }
+
+    /* ボタン */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      border-radius: 9999px;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      transition: all 0.25s ease;
+      cursor: pointer;
+      line-height: 1;
+    }
+    .btn:focus-visible { outline: 2px solid #E66B7C; outline-offset: 3px; }
+    .btn-primary { background: #E66B7C; color: #fff; box-shadow: 0 6px 18px rgba(230,107,124,0.28); }
+    .btn-primary:hover { background: #D95A6C; transform: translateY(-2px); box-shadow: 0 10px 22px rgba(230,107,124,0.34); }
+    .btn-kusa { background: #9FD6A3; color: #2F5D34; box-shadow: 0 6px 18px rgba(159,214,163,0.35); }
+    .btn-kusa:hover { background: #8CCB91; transform: translateY(-2px); }
+    .btn-sakura { background: #FFF2F5; color: #E66B7C; border: 1px solid rgba(248,181,197,0.6); }
+    .btn-sakura:hover { background: #FDE3EA; transform: translateY(-2px); }
+    .btn-outline { background: rgba(255,255,255,0.7); color: #44403c; border: 1px solid #d6d3d1; }
+    .btn-outline:hover { background: #fafaf9; border-color: #a8a29e; transform: translateY(-2px); }
+
+    /* フォーム部品 */
+    .field-input {
+      width: 100%; padding: 0.85rem 1.15rem; font-size: 0.85rem; border-radius: 1.25rem;
+      border: 1px solid #e7e5e4; background: rgba(255,255,255,0.95); color: #363230; transition: all 0.2s ease;
+    }
+    .field-input:focus { outline: none; border-color: #F8B5C5; box-shadow: 0 0 0 4px rgba(248,181,197,0.28); }
+  </style>
+</head>
+<body class="relative min-h-screen">
+
+  <!-- 水彩スポット背景レイヤー -->
+  <div class="watercolor-spot-layer">
+    <!-- 右上 -->
+    <div class="spot-tr-coral"></div>
+    <div class="spot-tr-yellow"></div>
+    <div class="spot-tr-green"></div>
+    <!-- 左中央 -->
+    <div class="spot-ml-green"></div>
+    <div class="spot-ml-yellow"></div>
+    <div class="spot-ml-coral"></div>
+    <!-- 右下 -->
+    <div class="spot-br-coral"></div>
+    <div class="spot-br-yellow"></div>
+    <div class="spot-br-green"></div>
+  </div>
+
+  <!-- コンテンツレイヤー -->
+  <div class="relative z-10 max-w-5xl mx-auto px-6 py-12">
+    
+    <!-- ヘッダー（正式ロゴ組み込み） -->
+    <header class="flex justify-between items-center pb-8 border-b border-stone-100">
+      <div class="flex items-center gap-4">
+        <!-- ブランドロゴマーク（梅結び×TH） -->
+        <div class="w-12 h-12 rounded-full bg-white shadow-sm border border-stone-100 p-1 flex items-center justify-center overflow-hidden">
+          <svg viewBox="0 0 100 100" class="w-full h-full" fill="none" stroke-linecap="round" stroke-linejoin="round">
+            <!-- 梅結び外枠の幾何学ライン（桜・草・黄） -->
+            <circle cx="50" cy="38" r="22" stroke="#E66B7C" stroke-width="2.5" opacity="0.9"/>
+            <circle cx="38" cy="54" r="22" stroke="#9FD6A3" stroke-width="2.5" opacity="0.9"/>
+            <circle cx="62" cy="54" r="22" stroke="#FDFF26" stroke-width="2.5" opacity="0.9"/>
+            <circle cx="42" cy="62" r="22" stroke="#E66B7C" stroke-width="2.5" opacity="0.75"/>
+            <circle cx="58" cy="62" r="22" stroke="#9FD6A3" stroke-width="2.5" opacity="0.75"/>
+            <!-- 中央モノグラム TH -->
+            <text x="49%" y="58%" text-anchor="middle" font-family="'Cormorant Garamond', serif" font-size="28" font-weight="700" fill="#E66B7C">TH</text>
+          </svg>
+        </div>
+        <div>
+          <span class="font-en text-2xl md:text-3xl font-semibold tracking-wider text-stone-800">THUMUGIIRO</span>
+          <p class="text-[0.65rem] text-dango-muted tracking-widest uppercase">Web System & Design Engineering</p>
+        </div>
+      </div>
+      
+      <!-- エンドユーザー用ナビゲーション -->
+      <nav class="hidden md:flex items-center gap-6 text-xs text-stone-600 font-medium">
+        <a href="#about" class="hover:text-dango-accent transition">理念</a>
+        <a href="#services" class="hover:text-dango-accent transition">事業内容</a>
+        <a href="#works" class="hover:text-dango-accent transition">開発実績</a>
+        <a href="#ai-consult" class="hover:text-dango-accent transition">AI相談</a>
+        <a href="#contact" class="btn btn-sakura px-4 py-2 text-xs">無料相談・お問合せ</a>
+      </nav>
+    </header>
+
+    <!-- 01. ブランドアイデンティティ & ロゴ規定（エンドユーザー向け） -->
+    <section class="my-20">
+      <div class="text-center mb-12">
+        <span class="font-en text-sm tracking-widest uppercase text-dango-muted">01 / Brand & Logo Identity</span>
+        <h2 class="text-2xl font-bold tracking-wide mt-1">ブランドロゴ・規定</h2>
+        <p class="text-xs text-stone-400 mt-2 max-w-lg mx-auto leading-relaxed">
+          相手を深く思い（THINK）、感謝（THANK）しながら縁を紡ぐ「TH」。<br>
+          信州飯田水引の梅結びの優美さと、三色団子の春色（桜・若草・レモンイエロー）を冠したシンボルです。
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <!-- プライマリ（桜色TH） -->
+        <div class="bg-white/95 backdrop-blur-md p-8 rounded-[2.5rem] border border-stone-100 shadow-[0_4px_20px_rgba(0,0,0,0.025)] flex flex-col items-center text-center">
+          <span class="font-en text-xs tracking-wider text-dango-accent uppercase font-bold mb-4">Primary Mark (Sakura)</span>
+          <div class="w-32 h-32 rounded-full bg-stone-50 border border-stone-100 p-2 flex items-center justify-center shadow-inner mb-4">
+            <!-- SVGロゴプレースホルダー（添付の桜色版） -->
+            <svg viewBox="0 0 100 100" class="w-full h-full" fill="none">
+              <circle cx="50" cy="38" r="22" stroke="#E66B7C" stroke-width="2.5" />
+              <circle cx="38" cy="54" r="22" stroke="#9FD6A3" stroke-width="2.5" />
+              <circle cx="62" cy="54" r="22" stroke="#FDFF26" stroke-width="2.5" />
+              <circle cx="42" cy="62" r="22" stroke="#E66B7C" stroke-width="2.5" opacity="0.8"/>
+              <circle cx="58" cy="62" r="22" stroke="#9FD6A3" stroke-width="2.5" opacity="0.8"/>
+              <text x="49%" y="58%" text-anchor="middle" font-family="'Cormorant Garamond', serif" font-size="28" font-weight="700" fill="#E66B7C">TH</text>
+            </svg>
+          </div>
+          <p class="text-xs font-bold text-stone-800">メインシンボル（通常版）</p>
+          <p class="text-[0.7rem] text-stone-500 mt-1">Webヘッダー、ファビコン、SNSアイコン、名刺の主役</p>
+        </div>
+
+        <!-- セカンダリ（若草色TH） -->
+        <div class="bg-white/95 backdrop-blur-md p-8 rounded-[2.5rem] border border-stone-100 shadow-[0_4px_20px_rgba(0,0,0,0.025)] flex flex-col items-center text-center">
+          <span class="font-en text-xs tracking-wider text-[#47834C] uppercase font-bold mb-4">Secondary Mark (Kusa)</span>
+          <div class="w-32 h-32 rounded-full bg-stone-50 border border-stone-100 p-2 flex items-center justify-center shadow-inner mb-4">
+            <!-- SVGロゴプレースホルダー（添付の若草色版） -->
+            <svg viewBox="0 0 100 100" class="w-full h-full" fill="none">
+              <circle cx="50" cy="38" r="22" stroke="#E66B7C" stroke-width="2.5" />
+              <circle cx="38" cy="54" r="22" stroke="#9FD6A3" stroke-width="2.5" />
+              <circle cx="62" cy="54" r="22" stroke="#FDFF26" stroke-width="2.5" />
+              <circle cx="42" cy="62" r="22" stroke="#E66B7C" stroke-width="2.5" opacity="0.8"/>
+              <circle cx="58" cy="62" r="22" stroke="#9FD6A3" stroke-width="2.5" opacity="0.8"/>
+              <text x="49%" y="58%" text-anchor="middle" font-family="'Cormorant Garamond', serif" font-size="28" font-weight="700" fill="#47834C">TH</text>
+            </svg>
+          </div>
+          <p class="text-xs font-bold text-stone-800">サブシンボル（若草版）</p>
+          <p class="text-[0.7rem] text-stone-500 mt-1">保守契約案内・システム稼働レポート・安心安全の訴求</p>
+        </div>
+
+        <!-- ワードマーク連動ロゴ -->
+        <div class="bg-white/95 backdrop-blur-md p-8 rounded-[2.5rem] border border-stone-100 shadow-[0_4px_20px_rgba(0,0,0,0.025)] flex flex-col items-center text-center justify-center">
+          <span class="font-en text-xs tracking-wider text-dango-muted uppercase font-bold mb-4">Full Lockup</span>
+          <div class="flex flex-col items-center py-2">
+            <div class="w-20 h-20 mb-2">
+              <svg viewBox="0 0 100 100" class="w-full h-full" fill="none">
+                <circle cx="50" cy="38" r="22" stroke="#E66B7C" stroke-width="2.5" />
+                <circle cx="38" cy="54" r="22" stroke="#9FD6A3" stroke-width="2.5" />
+                <circle cx="62" cy="54" r="22" stroke="#FDFF26" stroke-width="2.5" />
+                <circle cx="42" cy="62" r="22" stroke="#E66B7C" stroke-width="2.5" opacity="0.8"/>
+                <circle cx="58" cy="62" r="22" stroke="#9FD6A3" stroke-width="2.5" opacity="0.8"/>
+                <text x="49%" y="58%" text-anchor="middle" font-family="'Cormorant Garamond', serif" font-size="28" font-weight="700" fill="#E66B7C">TH</text>
+              </svg>
+            </div>
+            <span class="font-en text-2xl font-bold tracking-[0.2em] text-stone-800">THUMUGIIRO</span>
+          </div>
+          <p class="text-[0.7rem] text-stone-500 mt-2">正式なロゴタイプ＋シンボル統合仕様（請求書・契約書・Webトップ）</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 02. コンセプト（PHILOSOPHY） -->
+    <section class="my-28 relative py-8" id="about">
+      <div class="absolute right-0 top-0 text-stone-200/50 text-5xl md:text-7xl font-en watermark-text pointer-events-none z-0">
+        PHILOSOPHY
+      </div>
+
+      <div class="relative z-10 grid grid-cols-1 md:grid-cols-12 gap-10 items-center">
+        <div class="md:col-span-5 relative flex flex-col items-start">
+          <div class="w-56 h-36 rounded-2xl bg-stone-50 border border-white shadow-sm overflow-hidden flex items-center justify-center text-stone-400 text-xs">
+            <span>[ Image / 阿南町新野の澄んだ風景 ]</span>
+          </div>
+          <div class="w-64 h-44 rounded-2xl bg-white/90 border border-stone-100 shadow-md overflow-hidden flex items-center justify-center text-stone-400 text-xs ml-10 -mt-8 relative z-20">
+            <span>[ Image / 開発デスク・対話風景 ]</span>
+          </div>
+        </div>
+
+        <div class="md:col-span-7 md:pl-4">
+          <p class="font-en text-sm tracking-widest uppercase text-dango-muted mb-2">Think & Thank</p>
+          <h2 class="text-2xl md:text-3xl font-bold tracking-widest text-stone-800 leading-snug mb-6">
+            深く想い、感謝して、<br>
+            人と仕組みの縁を紡ぐ。
+          </h2>
+          <div class="space-y-4 text-xs md:text-sm text-stone-600 leading-relaxed font-normal max-w-lg">
+            <p>
+              「THUMUGIIRO」の頭文字である “TH” には、<br>
+              お客様の事業の未来を深く想う「THINK」と、出会いと信頼に対する「THANK（感謝）」の祈りが込められています。
+            </p>
+            <p>
+              難しい専門用語を使わず、お客様の言葉に耳を傾けること。<br>
+              10年のLaravel開発経験をもとに、公開後も長く安心して使える丈夫な仕組みを、南信州の静かな環境から丁寧にお仕立てします。
+            </p>
+          </div>
+          
+          <div class="mt-8 flex items-center gap-4">
+            <a href="#services" class="btn btn-sakura px-6 py-2.5 text-xs">
+              <span>事業について詳しく</span>
+              <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 03. 事業内容（エンドユーザー向けサービス） -->
+    <section class="my-28 relative z-10" id="services">
+      <div class="text-center mb-12">
+        <span class="font-en text-sm tracking-widest uppercase text-dango-muted">03 / Services</span>
+        <h2 class="text-2xl font-bold tracking-wide mt-1">ご提供できること</h2>
+        <p class="text-xs text-stone-400 mt-1">作って終わりではなく、長く寄り添うシステム開発</p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <!-- サービス1 -->
+        <div class="bg-dango-sakuraSoft/90 backdrop-blur-sm p-8 rounded-[2.5rem] border border-dango-sakura/25 shadow-sm flex flex-col justify-between">
+          <div>
+            <div class="w-12 h-12 rounded-2xl bg-white flex items-center justify-center text-dango-accent mb-4 shadow-sm">
+              <i data-lucide="laptop" class="w-6 h-6 stroke-[1.5]"></i>
+            </div>
+            <span class="font-en text-xs tracking-widest uppercase text-dango-accent font-semibold">Service 01</span>
+            <h3 class="text-lg font-bold text-stone-800 mt-1 mb-3">オーダーメイドWebシステム開発</h3>
+            <p class="text-xs leading-relaxed text-stone-600 mb-6">
+              PHP / Laravelを用いた高品質な業務システム、顧客管理、予約・受発注フォームの構築。お客様の現場のフローに合わせた直感的なUIと堅牢なDBを設計します。
+            </p>
+          </div>
+          <div class="pt-4 border-t border-dango-sakura/20 flex justify-between items-center text-xs">
+            <span class="text-stone-500">目安：50万円〜 / 納期2ヶ月〜</span>
+            <a href="#contact" class="font-bold text-dango-accent inline-flex items-center gap-1 hover:underline">相談する <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i></a>
+          </div>
+        </div>
+
+        <!-- サービス2 -->
+        <div class="bg-dango-kusaSoft/90 backdrop-blur-sm p-8 rounded-[2.5rem] border border-dango-kusa/30 shadow-sm flex flex-col justify-between">
+          <div>
+            <div class="w-12 h-12 rounded-2xl bg-white flex items-center justify-center text-[#47834C] mb-4 shadow-sm">
+              <i data-lucide="shield-check" class="w-6 h-6 stroke-[1.5]"></i>
+            </div>
+            <span class="font-en text-xs tracking-widest uppercase text-[#47834C] font-semibold">Service 02</span>
+            <h3 class="text-lg font-bold text-stone-800 mt-1 mb-3">定期死活監視・安心見守り保守</h3>
+            <p class="text-xs leading-relaxed text-stone-600 mb-6">
+              毎日0時・12時の定周期ヘルスチェック、SSL証明書の更新期限管理、万が一の障害時の即時通知。IT専任者のいない中小企業・個人事業主様を代行サポートします。
+            </p>
+          </div>
+          <div class="pt-4 border-t border-dango-kusa/25 flex justify-between items-center text-xs">
+            <span class="text-stone-500">月額：2万円〜（定常点検込）</span>
+            <a href="#contact" class="font-bold text-[#47834C] inline-flex items-center gap-1 hover:underline">相談する <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i></a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 04. 開発実績ギャラリー（Works） -->
+    <section class="my-28 relative z-10" id="works">
+      <div class="text-center mb-12">
+        <span class="font-en text-sm tracking-widest uppercase text-dango-muted">04 / Selected Works</span>
+        <h2 class="text-2xl font-bold tracking-wide mt-1">開発・制作実績</h2>
+        <p class="text-xs text-stone-400 mt-1">安心と使いやすさを形にしたプロジェクト例</p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div class="bg-white/95 backdrop-blur-sm rounded-[2rem] border border-stone-100 p-5 shadow-[0_4px_20px_rgba(0,0,0,0.025)] hover:shadow-md transition">
+          <div class="w-full h-40 rounded-2xl bg-stone-100 mb-4 flex items-center justify-center text-stone-400 text-xs">
+            [ サンプル画像 / 予約画面 ]
+          </div>
+          <div class="flex items-center gap-2 mb-2">
+            <span class="px-2.5 py-0.5 rounded-full text-[0.65rem] bg-dango-sakuraSoft text-dango-accent font-bold">Laravel 11</span>
+            <span class="px-2.5 py-0.5 rounded-full text-[0.65rem] bg-stone-100 text-stone-500">予約・決済</span>
+          </div>
+          <h4 class="text-sm font-bold text-stone-800 mb-1">サロン・教室向け予約管理システム</h4>
+          <p class="text-xs text-stone-500 leading-relaxed mb-3">
+            LINE連携でリピート率を高め、ダブルブッキングを完全防止するシンプルな予約受付。
+          </p>
+          <a href="#" class="text-xs text-dango-accent font-bold inline-flex items-center gap-1">詳しく見る <i data-lucide="arrow-right" class="w-3 h-3"></i></a>
+        </div>
+
+        <div class="bg-white/95 backdrop-blur-sm rounded-[2rem] border border-stone-100 p-5 shadow-[0_4px_20px_rgba(0,0,0,0.025)] hover:shadow-md transition">
+          <div class="w-full h-40 rounded-2xl bg-stone-100 mb-4 flex items-center justify-center text-stone-400 text-xs">
+            [ サンプル画像 / 会員画面 ]
+          </div>
+          <div class="flex items-center gap-2 mb-2">
+            <span class="px-2.5 py-0.5 rounded-full text-[0.65rem] bg-dango-kusaSoft text-[#47834C] font-bold">API連携</span>
+            <span class="px-2.5 py-0.5 rounded-full text-[0.65rem] bg-stone-100 text-stone-500">会員制</span>
+          </div>
+          <h4 class="text-sm font-bold text-stone-800 mb-1">地域コミュニティ情報プラットフォーム</h4>
+          <p class="text-xs text-stone-500 leading-relaxed mb-3">
+            地元店舗のイベントや見どころを投稿・共有できる、温かみのあるポータルサイト。
+          </p>
+          <a href="#" class="text-xs text-[#47834C] font-bold inline-flex items-center gap-1">詳しく見る <i data-lucide="arrow-right" class="w-3 h-3"></i></a>
+        </div>
+
+        <div class="bg-white/95 backdrop-blur-sm rounded-[2rem] border border-stone-100 p-5 shadow-[0_4px_20px_rgba(0,0,0,0.025)] hover:shadow-md transition">
+          <div class="w-full h-40 rounded-2xl bg-stone-100 mb-4 flex items-center justify-center text-stone-400 text-xs">
+            [ サンプル画像 / 監視画面 ]
+          </div>
+          <div class="flex items-center gap-2 mb-2">
+            <span class="px-2.5 py-0.5 rounded-full text-[0.65rem] bg-amber-50 text-amber-700 font-bold">保守・監視</span>
+            <span class="px-2.5 py-0.5 rounded-full text-[0.65rem] bg-stone-100 text-stone-500">死活点検</span>
+          </div>
+          <h4 class="text-sm font-bold text-stone-800 mb-1">小規模EC向け自動監視エージェント</h4>
+          <p class="text-xs text-stone-500 leading-relaxed mb-3">
+            毎日の0時・12時に決済APIを自動テスト。停止トラブルを早期検知する安心パック。
+          </p>
+          <a href="#" class="text-xs text-amber-700 font-bold inline-flex items-center gap-1">詳しく見る <i data-lucide="arrow-right" class="w-3 h-3"></i></a>
+        </div>
+      </div>
+    </section>
+
+    <!-- 05. AI無料事前相談チャットUI（エンドユーザー向け機能） -->
+    <section class="my-28 relative z-10" id="ai-consult">
+      <div class="text-center mb-10">
+        <span class="font-en text-sm tracking-widest uppercase text-dango-muted">05 / AI Assistant</span>
+        <h2 class="text-2xl font-bold tracking-wide mt-1">24時間 AI事前相談</h2>
+        <p class="text-xs text-stone-400 mt-1">「こんなシステム作れる？」「予算感は？」にお答えします</p>
+      </div>
+
+      <div class="max-w-xl mx-auto bg-white/95 backdrop-blur-md rounded-[2.5rem] border border-stone-100 shadow-[0_10px_30px_rgba(0,0,0,0.03)] p-6 md:p-8">
+        <!-- 会話ログエリア -->
+        <div class="space-y-4 mb-6">
+          <!-- AIの発話 -->
+          <div class="flex items-start gap-3">
+            <div class="w-8 h-8 rounded-full bg-dango-sakuraSoft border border-dango-sakura/50 flex items-center justify-center shrink-0 text-dango-accent text-xs font-en font-bold">
+              TH
+            </div>
+            <div class="bg-dango-sakuraSoft/70 text-stone-700 text-xs p-3.5 rounded-2xl rounded-tl-none leading-relaxed max-w-xs md:max-w-sm">
+              こんにちは！THUMUGIIROのAIアシスタントです。つくりたいシステムの概要や納期、ご予算についてお気軽にお聞かせください。
+            </div>
+          </div>
+
+          <!-- ユーザーの発話（例） -->
+          <div class="flex items-start justify-end gap-3">
+            <div class="bg-[#9FD6A3]/20 text-stone-800 text-xs p-3.5 rounded-2xl rounded-tr-none leading-relaxed max-w-xs md:max-w-sm">
+              個人サロンの予約システムを検討しています。大体の予算と期間を知りたいです。
+            </div>
+            <div class="w-8 h-8 rounded-full bg-stone-100 flex items-center justify-center shrink-0 text-stone-500 text-xs">
+              <i data-lucide="user" class="w-4 h-4"></i>
+            </div>
+          </div>
+
+          <!-- AIの回答 -->
+          <div class="flex items-start gap-3">
+            <div class="w-8 h-8 rounded-full bg-dango-sakuraSoft border border-dango-sakura/50 flex items-center justify-center shrink-0 text-dango-accent text-xs font-en font-bold">
+              TH
+            </div>
+            <div class="bg-dango-sakuraSoft/70 text-stone-700 text-xs p-3.5 rounded-2xl rounded-tl-none leading-relaxed max-w-xs md:max-w-sm">
+              ご相談ありがとうございます！個人サロン様向けですと、約40万〜60万円、期間は約1.5〜2ヶ月が目安となります。詳細なお見積もりをご希望の場合は、下のフォームからご連絡いただけます。
+            </div>
+          </div>
+        </div>
+
+        <!-- チャット入力欄 -->
+        <div class="relative">
+          <input type="text" class="field-input pr-12 text-xs" placeholder="AIに質問する（例：Laravelで会員制サイトを作りたい）">
+          <button class="absolute right-2 top-2 w-8 h-8 rounded-full bg-dango-accent text-white flex items-center justify-center hover:bg-[#D95A6C] transition shadow-sm" aria-label="送信">
+            <i data-lucide="arrow-up" class="w-4 h-4"></i>
+          </button>
+        </div>
+        <p class="text-[0.65rem] text-center text-stone-400 mt-3">※AIの回答は概算です。正確な要件定義・お見積もりは人間（代表エンジニア）が対応いたします。</p>
+      </div>
+    </section>
+
+    <!-- 06. 無料相談・お問合せフォーム（Contact） -->
+    <section class="my-28 relative z-10" id="contact">
+      <div class="text-center mb-10">
+        <span class="font-en text-sm tracking-widest uppercase text-dango-muted">06 / Contact</span>
+        <h2 class="text-2xl font-bold tracking-wide mt-1">無料相談・お見積もり</h2>
+        <p class="text-xs text-stone-400 mt-1">専門用語は不要です。まずはお困りごとをお聞かせください</p>
+      </div>
+
+      <form class="max-w-2xl mx-auto bg-white/95 backdrop-blur-md rounded-[2.5rem] border border-stone-100 shadow-[0_4px_20px_rgba(0,0,0,0.025)] p-8 md:p-10 space-y-6" onsubmit="return false;">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div>
+            <label class="block text-xs font-bold text-stone-700 mb-2">お名前 <span class="text-dango-accent text-[0.65rem] font-bold">必須</span></label>
+            <input type="text" class="field-input" placeholder="例）山田 花子">
+          </div>
+          <div>
+            <label class="block text-xs font-bold text-stone-700 mb-2">メールアドレス <span class="text-dango-accent text-[0.65rem] font-bold">必須</span></label>
+            <input type="email" class="field-input" placeholder="example@domain.jp">
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div>
+            <label class="block text-xs font-bold text-stone-700 mb-2">ご予算の目安</label>
+            <select class="field-input">
+              <option>未定・相談して決めたい</option>
+              <option>30万円 〜 50万円</option>
+              <option>50万円 〜 100万円</option>
+              <option>100万円以上</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-xs font-bold text-stone-700 mb-2">ご希望の公開時期</label>
+            <input type="text" class="field-input" placeholder="例）2027年春頃までに">
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-xs font-bold text-stone-700 mb-2">ご相談内容</label>
+          <textarea rows="4" class="field-input" placeholder="「手作業のExcel管理を自動化したい」「サイトの保守だけお願いしたい」など、思いつくままにお書きください。"></textarea>
+        </div>
+
+        <div class="pt-2 text-center">
+          <button type="submit" class="btn btn-primary px-10 py-3 text-sm shadow-md">
+            <span>この内容で無料相談を送信する</span>
+            <i data-lucide="send" class="w-4 h-4"></i>
+          </button>
+          <p class="text-[0.7rem] text-stone-400 mt-3">※2営業日以内に丁寧にご返信いたします。強引な営業は一切行いません。</p>
+        </div>
+      </form>
+    </section>
+
+    <!-- 07. よくあるご質問（FAQ） -->
+    <section class="my-28 relative z-10">
+      <div class="text-center mb-10">
+        <span class="font-en text-sm tracking-widest uppercase text-dango-muted">07 / FAQ</span>
+        <h2 class="text-xl font-bold tracking-wide mt-1">よくあるご質問</h2>
+      </div>
+
+      <div class="max-w-2xl mx-auto bg-white/95 backdrop-blur-md rounded-[2.5rem] border border-stone-100 shadow-[0_4px_20px_rgba(0,0,0,0.025)] p-8 divide-y divide-stone-100">
+        <div class="py-4">
+          <p class="text-sm font-bold text-stone-800 flex items-center gap-2">
+            <span class="font-en italic text-dango-accent text-lg">Q.</span> システムの専門用語が全くわからないのですが大丈夫ですか？
+          </p>
+          <p class="text-xs text-stone-500 mt-2 pl-6 leading-relaxed">
+            ご安心ください。お客様にプログラミングやインフラの専門知識は一切必要ありません。日頃の業務やお困りごとを普段の言葉でお話しいただければ、こちらで整理して最適な仕組みをご提案します。
+          </p>
+        </div>
+        <div class="py-4">
+          <p class="text-sm font-bold text-stone-800 flex items-center gap-2">
+            <span class="font-en italic text-dango-accent text-lg">Q.</span> 遠方からの依頼でもフルリモートで対応可能ですか？
+          </p>
+          <p class="text-xs text-stone-500 mt-2 pl-6 leading-relaxed">
+            はい、全国対応可能です。ZoomやGoogle Meetによるオンライン面談、メールやチャットツール（Slack等）を用いて、長野県下伊那郡から全国のお客様とスムーズに対話を進めております。
+          </p>
+        </div>
+        <div class="py-4">
+          <p class="text-sm font-bold text-stone-800 flex items-center gap-2">
+            <span class="font-en italic text-dango-accent text-lg">Q.</span> 他社が作った既存システムの改修や保守も頼めますか？
+          </p>
+          <p class="text-xs text-stone-500 mt-2 pl-6 leading-relaxed">
+            PHP / Laravelで構築されたシステムであれば喜んで承ります。仕様書が残っていない場合でもソースコードを解析し、安全にアップデートや機能追加を行います。
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- フッター（正式ロゴ・著作権表記） -->
+    <footer class="pt-12 pb-8 text-center border-t border-stone-100 relative z-10">
+      <div class="flex flex-col items-center justify-center mb-4">
+        <div class="w-10 h-10 mb-2">
+          <svg viewBox="0 0 100 100" class="w-full h-full" fill="none">
+            <circle cx="50" cy="38" r="22" stroke="#E66B7C" stroke-width="2.5" />
+            <circle cx="38" cy="54" r="22" stroke="#9FD6A3" stroke-width="2.5" />
+            <circle cx="62" cy="54" r="22" stroke="#FDFF26" stroke-width="2.5" />
+            <circle cx="42" cy="62" r="22" stroke="#E66B7C" stroke-width="2.5" opacity="0.8"/>
+            <circle cx="58" cy="62" r="22" stroke="#9FD6A3" stroke-width="2.5" opacity="0.8"/>
+            <text x="49%" y="58%" text-anchor="middle" font-family="'Cormorant Garamond', serif" font-size="28" font-weight="700" fill="#E66B7C">TH</text>
+          </svg>
+        </div>
+        <p class="font-en text-xl text-stone-700 tracking-widest font-semibold">THUMUGIIRO</p>
+        <p class="text-[0.65rem] text-dango-muted tracking-wider mt-0.5">想いを紡ぎ、感謝で結ぶシステム開発</p>
+      </div>
+      <p class="text-xs text-stone-400">&copy; 2026 THUMUGIIRO. All Rights Reserved.</p>
+    </footer>
+
+  </div>
+
+  <!-- Lucide Icons初期化 -->
+  <script>
+    lucide.createIcons();
+  </script>
+</body>
+</html>

@@ -1,0 +1,665 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>THUMUGIIRO - Responsive Admin Design System</title>
+  
+  <!-- Bootstrap 5.3.3 CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Google Fonts: Zen Kaku Gothic New & Cormorant Garamond -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap" rel="stylesheet">
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <style>
+    :root {
+      /* ブランド規定色：若草色（ソリッド） */
+      --brand-kusa: #47834C;
+      --brand-kusa-hover: #3a6b3e;
+      --brand-kusa-subtle: #edf5ee;
+      --brand-kusa-border: #bcd7bf;
+
+      /* 無彩色（Grayscale） */
+      --bg-main: #f8f9fa;
+      --bg-card: #ffffff;
+      --border-color: #e5e7eb;
+      --text-primary: #1f2937;
+      --text-secondary: #6b7280;
+      --text-muted: #9ca3af;
+
+      /* ダッシュボード集計カード専用パレット（グラデーションなし・ソリッド） */
+      --metric-revenue-bg: #eaf5ec;
+      --metric-revenue-text: #225e2a;
+      --metric-revenue-accent: #2e7d32;
+
+      --metric-expense-bg: #fdf0ee;
+      --metric-expense-text: #8c2e24;
+      --metric-expense-accent: #c24134;
+
+      --metric-profit-bg: #edf3fa;
+      --metric-profit-text: #1e416a;
+      --metric-profit-accent: #28548a;
+
+      --metric-alert-bg: #fef8eb;
+      --metric-alert-text: #785210;
+      --metric-alert-accent: #b47d18;
+    }
+
+    body {
+      font-family: 'Zen Kaku Gothic New', sans-serif;
+      background-color: var(--bg-main);
+      color: var(--text-primary);
+      font-size: 0.875rem;
+    }
+
+    .font-en {
+      font-family: 'Cormorant Garamond', serif;
+    }
+
+    /* グラデーション完全無効化 */
+    *, *::before, *::after {
+      background-image: none !important;
+    }
+
+    /* PC用常駐サイドバー */
+    .admin-sidebar {
+      width: 250px;
+      background-color: #ffffff;
+      border-right: 1px solid var(--border-color);
+      min-height: 100vh;
+    }
+
+    /* スマホ用オフキャンバスサイドバー */
+    .offcanvas-admin {
+      width: 280px !important;
+      background-color: #ffffff;
+      border-right: 1px solid var(--border-color);
+    }
+
+    .nav-link-custom {
+      color: var(--text-secondary);
+      border-radius: 8px;
+      padding: 0.65rem 0.85rem;
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      transition: all 0.15s ease-in-out;
+    }
+
+    .nav-link-custom:hover {
+      background-color: var(--bg-main);
+      color: var(--text-primary);
+    }
+
+    .nav-link-custom.active {
+      background-color: var(--brand-kusa-subtle);
+      color: var(--brand-kusa);
+      font-weight: 700;
+    }
+
+    /* プライマリボタン（若草色単色） */
+    .btn-kusa {
+      background-color: var(--brand-kusa);
+      border-color: var(--brand-kusa);
+      color: #ffffff;
+      font-weight: 600;
+      border-radius: 6px;
+    }
+
+    .btn-kusa:hover, .btn-kusa:focus {
+      background-color: var(--brand-kusa-hover);
+      border-color: var(--brand-kusa-hover);
+      color: #ffffff;
+    }
+
+    .btn-outline-kusa {
+      background-color: transparent;
+      border-color: var(--brand-kusa);
+      color: var(--brand-kusa);
+      font-weight: 600;
+      border-radius: 6px;
+    }
+
+    .btn-outline-kusa:hover {
+      background-color: var(--brand-kusa-subtle);
+      border-color: var(--brand-kusa);
+      color: var(--brand-kusa);
+    }
+
+    /* 無彩色ボタン */
+    .btn-neutral {
+      background-color: #ffffff;
+      border: 1px solid var(--border-color);
+      color: var(--text-primary);
+      font-weight: 500;
+      border-radius: 6px;
+    }
+
+    .btn-neutral:hover {
+      background-color: #f3f4f6;
+      border-color: #d1d5db;
+      color: var(--text-primary);
+    }
+
+    /* フォームコントロール */
+    .form-control:focus, .form-select:focus {
+      border-color: var(--brand-kusa);
+      box-shadow: 0 0 0 3px rgba(71, 131, 76, 0.18);
+    }
+
+    .form-check-input:checked {
+      background-color: var(--brand-kusa);
+      border-color: var(--brand-kusa);
+    }
+
+    /* テーブル */
+    .table-custom {
+      border-collapse: separate;
+      border-spacing: 0;
+      min-width: 620px; /* スマホ時の横スクロールを保証 */
+    }
+
+    .table-custom thead th {
+      background-color: #f3f4f6;
+      color: var(--text-secondary);
+      font-weight: 700;
+      font-size: 0.75rem;
+      letter-spacing: 0.04em;
+      border-bottom: 1px solid var(--border-color);
+      padding: 0.75rem 1rem;
+      white-space: nowrap;
+    }
+
+    .table-custom tbody td {
+      padding: 0.85rem 1rem;
+      border-bottom: 1px solid var(--border-color);
+      vertical-align: middle;
+      background-color: #ffffff;
+      white-space: nowrap;
+    }
+
+    .table-custom tbody tr:hover td {
+      background-color: #f9fafb;
+    }
+
+    /* 無彩色バッジ & 監視ステータス */
+    .badge-neutral {
+      background-color: #f3f4f6;
+      color: #4b5563;
+      font-weight: 600;
+      font-size: 0.72rem;
+      border: 1px solid #e5e7eb;
+    }
+
+    .badge-kusa {
+      background-color: var(--brand-kusa-subtle);
+      color: var(--brand-kusa);
+      font-weight: 700;
+      font-size: 0.72rem;
+      border: 1px solid var(--brand-kusa-border);
+    }
+
+    /* カードコンテナ */
+    .card-custom {
+      background-color: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+    }
+
+    /* 集計カード（マルチカラー） */
+    .metric-card-revenue {
+      background-color: var(--metric-revenue-bg);
+      border: 1px solid rgba(46, 125, 50, 0.2);
+      color: var(--metric-revenue-text);
+    }
+    .metric-card-expense {
+      background-color: var(--metric-expense-bg);
+      border: 1px solid rgba(194, 65, 52, 0.2);
+      color: var(--metric-expense-text);
+    }
+    .metric-card-profit {
+      background-color: var(--metric-profit-bg);
+      border: 1px solid rgba(40, 84, 138, 0.2);
+      color: var(--metric-profit-text);
+    }
+    .metric-card-alert {
+      background-color: var(--metric-alert-bg);
+      border: 1px solid rgba(180, 125, 24, 0.2);
+      color: var(--metric-alert-text);
+    }
+
+    /* モバイル専用トップバー */
+    .mobile-topbar {
+      background-color: #ffffff;
+      border-bottom: 1px solid var(--border-color);
+      position: sticky;
+      top: 0;
+      z-index: 1020;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ========================================================
+       1. スマホ専用トップバー（幅992px未満で表示・左上にハンバーガーボタン）
+       ======================================================== -->
+  <header class="mobile-topbar d-lg-none d-flex align-items-center justify-content-between px-3 py-2">
+    <!-- 左上ハンバーガーボタン -->
+    <button class="btn btn-neutral p-2 d-flex align-items-center justify-content-center" 
+            type="button" 
+            data-bs-toggle="offcanvas" 
+            data-bs-target="#adminMobileMenu" 
+            aria-controls="adminMobileMenu"
+            aria-label="メニューを開く">
+      <i data-lucide="menu" style="width: 20px; height: 20px; color: var(--text-primary);"></i>
+    </button>
+
+    <!-- モバイル用ヘッダーロゴ -->
+    <div class="d-flex align-items-center gap-2">
+      <div class="rounded-circle d-flex align-items-center justify-content-center border" style="width: 28px; height: 28px; border-color: var(--brand-kusa-border) !important; background-color: var(--brand-kusa-subtle);">
+        <span class="font-en fw-bold" style="color: var(--brand-kusa); font-size: 0.85rem; line-height: 1;">TH</span>
+      </div>
+      <span class="font-en fw-bold" style="font-size: 1.05rem; letter-spacing: 0.08em; color: var(--text-primary);">THUMUGIIRO</span>
+    </div>
+
+    <!-- 右上クイックアクション（通知・ログアウト等） -->
+    <div class="d-flex align-items-center gap-1">
+      <span class="badge badge-kusa" style="font-size: 0.65rem;">稼働中</span>
+    </div>
+  </header>
+
+  <!-- ========================================================
+       2. スマホ専用オフキャンバス（ドロワーメニュー）
+       ======================================================== -->
+  <div class="offcanvas offcanvas-start offcanvas-admin d-lg-none" tabindex="-1" id="adminMobileMenu" aria-labelledby="adminMobileMenuLabel">
+    <div class="offcanvas-header border-bottom py-3">
+      <div class="d-flex align-items-center gap-2" id="adminMobileMenuLabel">
+        <div class="rounded-circle d-flex align-items-center justify-content-center border" style="width: 32px; height: 32px; border-color: var(--brand-kusa-border) !important; background-color: var(--brand-kusa-subtle);">
+          <span class="font-en fw-bold" style="color: var(--brand-kusa); font-size: 0.95rem;">TH</span>
+        </div>
+        <div>
+          <div class="font-en fw-bold" style="font-size: 1.1rem; letter-spacing: 0.08em; color: var(--text-primary); line-height: 1.1;">THUMUGIIRO</div>
+          <span class="text-secondary" style="font-size: 0.65rem;">ADMIN CONSOLE</span>
+        </div>
+      </div>
+      <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="閉じる"></button>
+    </div>
+
+    <div class="offcanvas-body d-flex flex-column justify-content-between p-3">
+      <nav class="nav flex-column gap-1">
+        <a href="#" class="nav-link-custom active" data-bs-dismiss="offcanvas">
+          <i data-lucide="layout-dashboard" style="width: 18px; height: 18px;"></i>
+          <span>ダッシュボード</span>
+        </a>
+        <a href="#" class="nav-link-custom" data-bs-dismiss="offcanvas">
+          <i data-lucide="folder-kanban" style="width: 18px; height: 18px;"></i>
+          <span>案件・契約管理</span>
+        </a>
+        <a href="#" class="nav-link-custom" data-bs-dismiss="offcanvas">
+          <i data-lucide="users" style="width: 18px; height: 18px;"></i>
+          <span>顧客台帳</span>
+        </a>
+        <a href="#" class="nav-link-custom" data-bs-dismiss="offcanvas">
+          <i data-lucide="activity" style="width: 18px; height: 18px;"></i>
+          <span>API監視（0時/12時）</span>
+        </a>
+        <a href="#" class="nav-link-custom" data-bs-dismiss="offcanvas">
+          <i data-lucide="calculator" style="width: 18px; height: 18px;"></i>
+          <span>売上・経費管理</span>
+        </a>
+        <a href="#" class="nav-link-custom" data-bs-dismiss="offcanvas">
+          <i data-lucide="file-spreadsheet" style="width: 18px; height: 18px;"></i>
+          <span>青色申告CSV出力</span>
+        </a>
+      </nav>
+
+      <div class="pt-3 border-top">
+        <div class="d-flex align-items-center justify-content-between">
+          <div>
+            <div class="fw-bold" style="font-size: 0.8rem;">代表エンジニア</div>
+            <div class="text-secondary" style="font-size: 0.7rem;">admin@thumugiiro.jp</div>
+          </div>
+          <i data-lucide="log-out" class="text-secondary" style="width: 18px; height: 18px; cursor: pointer;"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================================
+       3. PC常駐サイドバー + メインコンテンツレイアウト
+       ======================================================== -->
+  <div class="d-flex">
+    
+    <!-- PC用サイドバー（幅992px以上で常駐・それ未満では非表示） -->
+    <aside class="admin-sidebar d-none d-lg-flex flex-column justify-content-between p-3 shrink-0">
+      <div>
+        <!-- ブランドロゴ -->
+        <div class="d-flex align-items-center gap-2 px-2 py-3 mb-4 border-bottom">
+          <div class="rounded-circle d-flex align-items-center justify-content-center border" style="width: 36px; height: 36px; border-color: var(--brand-kusa-border) !important; background-color: var(--brand-kusa-subtle);">
+            <span class="font-en fw-bold" style="color: var(--brand-kusa); font-size: 1.1rem; line-height: 1;">TH</span>
+          </div>
+          <div>
+            <div class="font-en fw-bold" style="font-size: 1.15rem; letter-spacing: 0.1em; color: var(--text-primary); line-height: 1.1;">THUMUGIIRO</div>
+            <span class="text-secondary" style="font-size: 0.65rem; letter-spacing: 0.05em;">ADMIN CONSOLE</span>
+          </div>
+        </div>
+
+        <!-- ナビゲーションメニュー -->
+        <nav class="nav flex-column gap-1">
+          <a href="#" class="nav-link-custom active">
+            <i data-lucide="layout-dashboard" style="width: 18px; height: 18px;"></i>
+            <span>ダッシュボード</span>
+          </a>
+          <a href="#" class="nav-link-custom">
+            <i data-lucide="folder-kanban" style="width: 18px; height: 18px;"></i>
+            <span>案件・契約管理</span>
+          </a>
+          <a href="#" class="nav-link-custom">
+            <i data-lucide="users" style="width: 18px; height: 18px;"></i>
+            <span>顧客台帳</span>
+          </a>
+          <a href="#" class="nav-link-custom">
+            <i data-lucide="activity" style="width: 18px; height: 18px;"></i>
+            <span>API監視（0時/12時）</span>
+          </a>
+          <a href="#" class="nav-link-custom">
+            <i data-lucide="calculator" style="width: 18px; height: 18px;"></i>
+            <span>売上・経費管理</span>
+          </a>
+          <a href="#" class="nav-link-custom">
+            <i data-lucide="file-spreadsheet" style="width: 18px; height: 18px;"></i>
+            <span>青色申告CSV出力</span>
+          </a>
+        </nav>
+      </div>
+
+      <!-- ユーザー情報 -->
+      <div class="pt-3 border-top px-2">
+        <div class="d-flex align-items-center justify-content-between">
+          <div>
+            <div class="fw-bold" style="font-size: 0.8rem;">代表エンジニア</div>
+            <div class="text-secondary" style="font-size: 0.7rem;">admin@thumugiiro.jp</div>
+          </div>
+          <i data-lucide="log-out" class="text-secondary" style="width: 16px; height: 16px; cursor: pointer;"></i>
+        </div>
+      </div>
+    </aside>
+
+    <!-- メインコンテンツエリア（PC・スマホ共通レスポンシブ） -->
+    <main class="flex-grow-1 p-3 p-md-4" style="min-width: 0;">
+      
+      <!-- PC用トップバー / スマホ用見出しブロック -->
+      <header class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 mb-4 pb-3 border-bottom">
+        <div>
+          <h1 class="h4 fw-bold mb-1">管理ダッシュボード</h1>
+          <p class="text-secondary mb-0" style="font-size: 0.78rem;">事業状況の集計、顧客案件の進捗、API監視状態の統合管理</p>
+        </div>
+        <div class="d-flex gap-2">
+          <button class="btn btn-neutral btn-sm d-flex align-items-center gap-1 flex-fill flex-md-initial justify-content-center">
+            <i data-lucide="download" style="width: 15px; height: 15px;"></i>
+            <span>仕訳CSV</span>
+          </button>
+          <button class="btn btn-kusa btn-sm d-flex align-items-center gap-1 flex-fill flex-md-initial justify-content-center">
+            <i data-lucide="plus" style="width: 15px; height: 15px;"></i>
+            <span>新規案件登録</span>
+          </button>
+        </div>
+      </header>
+
+      <!-- 1. ダッシュボード集計カード（マルチカラー：スマホでは1〜2列、PCでは4列） -->
+      <section class="mb-4">
+        <div class="d-flex align-items-center justify-content-between mb-3">
+          <h2 class="h6 fw-bold mb-0 text-secondary" style="font-size: 0.75rem; letter-spacing: 0.08em; text-transform: uppercase;">
+            01. Metrics Overview (Multi-colored)
+          </h2>
+          <span class="text-secondary" style="font-size: 0.72rem;">2026年11月度</span>
+        </div>
+
+        <div class="row g-3">
+          <!-- 売上（グリーン系） -->
+          <div class="col-12 col-sm-6 col-xl-3">
+            <div class="card p-3 rounded-3 metric-card-revenue">
+              <div class="d-flex justify-content-between align-items-center mb-2">
+                <span class="fw-bold" style="font-size: 0.78rem;">当月 売上高（確定）</span>
+                <i data-lucide="wallet" style="width: 18px; height: 18px; color: var(--metric-revenue-accent);"></i>
+              </div>
+              <div class="font-en fw-bold" style="font-size: 1.85rem; line-height: 1.1;">¥ 640,000</div>
+              <div class="mt-2" style="font-size: 0.72rem; opacity: 0.9;">前月比 +8.5%（入金確認済）</div>
+            </div>
+          </div>
+
+          <!-- 支出・経費（ローズ／テラコッタ系） -->
+          <div class="col-12 col-sm-6 col-xl-3">
+            <div class="card p-3 rounded-3 metric-card-expense">
+              <div class="d-flex justify-content-between align-items-center mb-2">
+                <span class="fw-bold" style="font-size: 0.78rem;">当月 経費支出（按分前）</span>
+                <i data-lucide="receipt" style="width: 18px; height: 18px; color: var(--metric-expense-accent);"></i>
+              </div>
+              <div class="font-en fw-bold" style="font-size: 1.85rem; line-height: 1.1;">¥ 118,420</div>
+              <div class="mt-2" style="font-size: 0.72rem; opacity: 0.9;">サーバー・通信費・消耗品など</div>
+            </div>
+          </div>
+
+          <!-- 差引利益（ネイビー／インディゴ系） -->
+          <div class="col-12 col-sm-6 col-xl-3">
+            <div class="card p-3 rounded-3 metric-card-profit">
+              <div class="d-flex justify-content-between align-items-center mb-2">
+                <span class="fw-bold" style="font-size: 0.78rem;">当月 事業所得概算</span>
+                <i data-lucide="trending-up" style="width: 18px; height: 18px; color: var(--metric-profit-accent);"></i>
+              </div>
+              <div class="font-en fw-bold" style="font-size: 1.85rem; line-height: 1.1;">¥ 521,580</div>
+              <div class="mt-2" style="font-size: 0.72rem; opacity: 0.9;">青色申告控除前・基礎値</div>
+            </div>
+          </div>
+
+          <!-- 監視異常・アラート（アンバー系） -->
+          <div class="col-12 col-sm-6 col-xl-3">
+            <div class="card p-3 rounded-3 metric-card-alert">
+              <div class="d-flex justify-content-between align-items-center mb-2">
+                <span class="fw-bold" style="font-size: 0.78rem;">API死活監視 稼働状況</span>
+                <i data-lucide="bell" style="width: 18px; height: 18px; color: var(--metric-alert-accent);"></i>
+              </div>
+              <div class="font-en fw-bold" style="font-size: 1.85rem; line-height: 1.1;">9 / 9 <span style="font-size: 0.9rem; font-family: sans-serif;">正常</span></div>
+              <div class="mt-2" style="font-size: 0.72rem; opacity: 0.9;">直近テスト: 本日 12:00（全系パス）</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 2. 進行中案件テーブル（横スクロール完全対応） -->
+      <section class="card-custom p-3 p-md-4 mb-4">
+        <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-2 mb-3">
+          <div>
+            <h2 class="h6 fw-bold mb-0">進行中の案件・保守契約</h2>
+            <span class="text-secondary" style="font-size: 0.75rem;">直近で納品・請求が発生する顧客プロジェクト一覧</span>
+          </div>
+          <div class="d-flex gap-2">
+            <input type="text" class="form-control form-control-sm" placeholder="案件・顧客名で検索..." style="min-width: 160px;">
+            <select class="form-select form-select-sm" style="min-width: 120px;">
+              <option>すべて</option>
+              <option>開発中</option>
+              <option>保守中</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="table-responsive">
+          <table class="table table-custom mb-0">
+            <thead>
+              <tr>
+                <th>案件コード</th>
+                <th>案件名 / 顧客</th>
+                <th>開発種別</th>
+                <th>契約金額（税抜）</th>
+                <th>納期 / 更新期日</th>
+                <th>状態</th>
+                <th class="text-end">操作</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="font-en fw-bold">PRJ-2026-08</td>
+                <td>
+                  <div class="fw-bold">サロン予約受付システム構築</div>
+                  <div class="text-secondary" style="font-size: 0.72rem;">サンプル企画合同会社</div>
+                </td>
+                <td><span class="badge badge-neutral">Laravel 11 / API</span></td>
+                <td class="font-en fw-bold">¥ 580,000</td>
+                <td class="text-secondary">2027-01-31</td>
+                <td><span class="badge badge-kusa">開発中（70%）</span></td>
+                <td class="text-end">
+                  <button class="btn btn-neutral btn-sm py-1 px-2" style="font-size: 0.72rem;">詳細</button>
+                </td>
+              </tr>
+              <tr>
+                <td class="font-en fw-bold">PRJ-2026-05</td>
+                <td>
+                  <div class="fw-bold">受発注管理バッチ処理改修</div>
+                  <div class="text-secondary" style="font-size: 0.72rem;">南信州製造株式会社</div>
+                </td>
+                <td><span class="badge badge-neutral">PHP / MySQL</span></td>
+                <td class="font-en fw-bold">¥ 240,000</td>
+                <td class="text-secondary">2026-12-15</td>
+                <td><span class="badge badge-kusa">受入テスト中</span></td>
+                <td class="text-end">
+                  <button class="btn btn-neutral btn-sm py-1 px-2" style="font-size: 0.72rem;">詳細</button>
+                </td>
+              </tr>
+              <tr>
+                <td class="font-en fw-bold">MNT-2026-01</td>
+                <td>
+                  <div class="fw-bold">年間死活監視・SSL保守パック</div>
+                  <div class="text-secondary" style="font-size: 0.72rem;">阿南町商工パートナーズ</div>
+                </td>
+                <td><span class="badge badge-neutral">定期保守（月次）</span></td>
+                <td class="font-en fw-bold">¥ 30,000 /月</td>
+                <td class="text-secondary">2027-03-31</td>
+                <td><span class="badge badge-kusa">正常稼働中</span></td>
+                <td class="text-end">
+                  <button class="btn btn-neutral btn-sm py-1 px-2" style="font-size: 0.72rem;">詳細</button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- 3. 二段グリッド（API死活監視ログ & 青色申告・仕訳登録フォーム） -->
+      <div class="row g-4">
+        
+        <!-- API死活監視（毎日0時・12時） -->
+        <div class="col-12 col-lg-6">
+          <div class="card-custom p-3 p-md-4 h-100">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+              <div>
+                <h2 class="h6 fw-bold mb-0">API死活監視（定周期自動点検）</h2>
+                <span class="text-secondary" style="font-size: 0.72rem;">毎日 0:00 / 12:00 の自動ログ</span>
+              </div>
+              <button class="btn btn-outline-kusa btn-sm" style="font-size: 0.72rem;">即時点検</button>
+            </div>
+
+            <div class="table-responsive">
+              <table class="table table-custom mb-0" style="font-size: 0.78rem;">
+                <thead>
+                  <tr>
+                    <th>点検日時</th>
+                    <th>監視対象</th>
+                    <th>状態</th>
+                    <th>応答速度</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="font-en">2026-11-16 12:00</td>
+                    <td>予約システム API</td>
+                    <td><span class="badge badge-kusa">200 OK</span></td>
+                    <td class="font-en">240 ms</td>
+                  </tr>
+                  <tr>
+                    <td class="font-en">2026-11-16 00:00</td>
+                    <td>予約システム API</td>
+                    <td><span class="badge badge-kusa">200 OK</span></td>
+                    <td class="font-en">198 ms</td>
+                  </tr>
+                  <tr>
+                    <td class="font-en">2026-11-15 12:00</td>
+                    <td>決済連携 Gateway API</td>
+                    <td><span class="badge badge-kusa">200 OK</span></td>
+                    <td class="font-en">312 ms</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- 会計仕訳・経費簡易登録フォーム -->
+        <div class="col-12 col-lg-6">
+          <div class="card-custom p-3 p-md-4 h-100">
+            <div class="mb-3">
+              <h2 class="h6 fw-bold mb-0">仕訳・経費伝票の登録</h2>
+              <span class="text-secondary" style="font-size: 0.72rem;">マネーフォワード確定申告（青色申告）連携用</span>
+            </div>
+
+            <form onsubmit="return false;">
+              <div class="row g-2 mb-3">
+                <div class="col-12 col-sm-6">
+                  <label class="form-label text-secondary fw-bold" style="font-size: 0.72rem;">発生日</label>
+                  <input type="date" class="form-control form-control-sm" value="2026-11-16">
+                </div>
+                <div class="col-12 col-sm-6">
+                  <label class="form-label text-secondary fw-bold" style="font-size: 0.72rem;">勘定科目</label>
+                  <select class="form-select form-select-sm">
+                    <option>通信費（サーバー代・ドメイン）</option>
+                    <option>消耗品費（PC周辺機器）</option>
+                    <option>旅費交通費</option>
+                    <option>売上高（報酬入金）</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="row g-2 mb-3">
+                <div class="col-12 col-sm-6">
+                  <label class="form-label text-secondary fw-bold" style="font-size: 0.72rem;">金額（税込）</label>
+                  <input type="number" class="form-control form-control-sm" placeholder="例）12800">
+                </div>
+                <div class="col-12 col-sm-6">
+                  <label class="form-label text-secondary fw-bold" style="font-size: 0.72rem;">家事按分比率</label>
+                  <select class="form-select form-select-sm">
+                    <option>事業 100%（按分なし）</option>
+                    <option>事業 50% / 家事 50%（ネット回線）</option>
+                    <option>事業 30% / 家事 70%（電気代）</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="mb-3">
+                <label class="form-label text-secondary fw-bold" style="font-size: 0.72rem;">摘要・証憑メモ</label>
+                <input type="text" class="form-control form-control-sm" placeholder="さくらのVPS 11月度利用料（PDF保存済）">
+              </div>
+
+              <div class="d-flex justify-content-end gap-2">
+                <button type="reset" class="btn btn-neutral btn-sm">クリア</button>
+                <button type="submit" class="btn btn-kusa btn-sm">仕訳を記録</button>
+              </div>
+            </form>
+          </div>
+        </div>
+
+      </div>
+
+    </main>
+  </div>
+
+  <!-- Bootstrap 5 JS Bundle -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    // Lucide Icons初期化
+    lucide.createIcons();
+  </script>
+</body>
+</html>
