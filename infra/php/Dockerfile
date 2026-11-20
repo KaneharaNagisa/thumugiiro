@@ -22,4 +22,4 @@ COPY infra/php/crontab /etc/cron.d/laravel
 RUN sed -i 's/\r$//' /etc/cron.d/laravel \
     && chmod 0644 /etc/cron.d/laravel
 
-WORKDIR /var/www/html
+WORKDIR /var/www/html/scr

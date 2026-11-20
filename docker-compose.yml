@@ -3,7 +3,7 @@ x-php: &php
   build:
     context: .
     dockerfile: infra/php/Dockerfile
-  working_dir: /var/www/html
+  working_dir: /var/www/html/scr
   volumes:
     - .:/var/www/html
   networks:
